@@ -1,19 +1,19 @@
-const UsersModel = require('../model/Users');
-const usersModel = new UsersModel();
+const CarsModel = require('../model/Cars');
+const carsModel = new CarsModel();
 const cryptoPassword = require('../utils/cryptoPassword');
 
-class Users {
+class Cars {
     get(req,res) {
         const { id } = req.params;
 
-        usersModel.get(id)
-            .then((user) => {
+        carsModel.get(id)
+            .then((car) => {
                 //console.log(user);
-                if (!user.exists) {
-                    res.status(404).send({message:'User not found'});
+                if (!car.exists) {
+                    res.status(404).send({message:'Car not found'});
                 }
 
-                res.json(user.data());
+                res.json(car.data());
             })
             .catch((error) => {
                 res.status(500).send(error);
@@ -26,19 +26,18 @@ class Users {
     create(req,res){
         const data = {
             ...req.body,
-            password: cryptoPassword(req.body.password),
         }
 
-        usersModel.create(data)
+        carsModel.create(data)
 
-            .then(user => {
-                console.log(`Adicionado usuario com ID: ${user.id}`);
-                //res.status(200).send({message:`Adicionado usuario com ID: ${user.id}`});
+            .then(car => {
+                console.log(`Adicionado usuario com ID: ${car.id}`);
+                //res.status(200).send({message:`Adicionado carro com ID: ${car.id}`});
                 delete data.password;
 
                 res.status(201).json({
                     ...data,
-                    id: user.id,
+                    id: car.id,
                 });
 
               })
@@ -50,10 +49,10 @@ class Users {
 
     delete(req,res){
         const { id } = req.params;
-        usersModel.delete(id);
-        res.send("Usuário de id " + id + " removido com sucesso!");
+        carsModel.delete(id);
+        res.send("Carro de id " + id + " removido com sucesso!");
     }
 
 }
 
-module.exports = Users;
+module.exports = Cars;

@@ -8,7 +8,7 @@ const usersController = new Users();
 // Instancia do router
 const router = express.Router();
 
-router.get('/:id', usersController.get);
+router.get('/:id', verifyToken, usersController.get);
 router.post('/', usersController.create);
 router.delete('/:id', verifyToken, usersController.delete);
 
