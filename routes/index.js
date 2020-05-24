@@ -14,5 +14,9 @@ router.use('/users/auth', auth);
 
 router.use('/cars', cars);
 
+router.use((req, res, next) => {
+    res.status(404).send({ message: 'PÁGINA NÃO ENCONTRADA!!!' });
+  });
+
 module.exports =  router;
 

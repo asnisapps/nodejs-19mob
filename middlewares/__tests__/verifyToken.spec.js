@@ -24,9 +24,9 @@ const next = () => {};
 describe('verifyToken', () => {
 
     //401
-    // it('should return Not authorized', () => {
-    //     expect(verifyToken(nul)).toEqual(401);
-    // });
+    it('should return Not authorized', () => {
+        expect(verifyToken(nul)).toEqual(401);
+    });
 
     //500
     it('should return error', () => {
