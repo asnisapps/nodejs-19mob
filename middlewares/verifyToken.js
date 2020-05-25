@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config/default');
 
+var invalidTokenError = false;
+
 const verifyToken = (req,res,next) => {
     const token = req.headers['x-access-token'];
 
@@ -14,7 +16,12 @@ const verifyToken = (req,res,next) => {
     }
 
     jwt.verify(token, secret, (error,decode) => {
+        console.log(error);
+
         if (error) {
+
+            invalidTokenError = true;
+
             return res
                 .status(500)
                 .send({error});
@@ -22,8 +29,16 @@ const verifyToken = (req,res,next) => {
 
         console.log('TOKEN DECODED: ', decode);
 
-        next();
+        next();       
+
     });
+
+    if (!invalidTokenError){
+        return('token_verified');
+    } else {
+        invalidTokenError = false;  
+        return('token_invalid');        
+    }    
 }
 
 module.exports = verifyToken;

@@ -1,41 +1,72 @@
 const verifyToken = require('../verifyToken');
 const createToken = require('../../utils/createToken');
 
-//TOKEN DECODED
-const mockId = "abc123"
-const mockValidToken = createToken({ id: mockId })
-const headerValid = { "x-access-token": mockValidToken }
-const reqValidToken = {};
-reqValidToken.headers = headerValid
-
 //500
-const mockInvalidToken = "tokenInvalido123"
-const headerInvalid = { "x-access-token": mockInvalidToken }
-const reqInvalidToken = {};
-reqInvalidToken.headers = headerInvalid
+// const mockInvalidToken = "tokenInvalido123"
+// const headerInvalid = { "x-access-token": mockInvalidToken }
+// const reqInvalidToken = {};
+// reqInvalidToken.headers = headerInvalid
 
-var res = {
-    status() {},
-    send() {}
-  };
+//401
+// const headerNull = { "x-access-token": null }
+// const reqNullToken = {};
+// reqNullToken.headers = headerNull
 
-const next = () => {};
+const mockResponse = () => {
+    const res = {};
+    res.status = jest.fn().mockReturnValue(res);
+    res.json = jest.fn().mockReturnValue(res);
+    res.send = jest.fn().mockReturnValue(res);
+    return res;
+};
+
+const mockRes = mockResponse();
+
+const mockNext = jest.fn();
 
 describe('verifyToken', () => {
 
     //401
-    it('should return Not authorized', () => {
-        expect(verifyToken(nul)).toEqual(401);
+    it('should return Not authorized', async () => {
+
+        const mockReqNullToken = {
+            headers: {
+                "x-access-token": '' //Token Nulo
+            }
+        };     
+
+        const res = await verifyToken(mockReqNullToken, mockRes, mockNext);
+        expect(res.status).toHaveBeenCalledWith(401);       
     });
 
-    //500
-    it('should return error', () => {
-        expect(verifyToken(reqInvalidToken,res,next).status).toEqual(500);
+    // //500
+    it('should return error', async () => {
+
+        const mockReqInvalidToken = {
+            headers: {
+                "x-access-token": 'tokenInvalido123' //Token Invalido
+            }
+        };     
+
+        const res = await verifyToken(mockReqInvalidToken, mockRes, mockNext);
+        expect(res).toBe('token_invalid');
     });
 
     //TOKEN DECODED
-    // it('should return Token Decoded', () => {
-    //     expect(verifyToken(reqValidToken)).toEqual();
-    // });
+    it('should return Token Decoded', async () => {
+
+        //TOKEN DECODED
+        const mockId = "abc123"
+        const mockValidToken = createToken({ id: mockId })
+
+        const mockReqValidToken = {
+            headers: {
+                "x-access-token": mockValidToken
+            }
+        };
+
+        const res = await verifyToken(mockReqValidToken, mockRes, mockNext);
+        expect(res).toBe('token_verified');
+    });
 
 });
