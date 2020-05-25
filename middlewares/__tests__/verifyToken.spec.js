@@ -39,7 +39,7 @@ describe('verifyToken', () => {
         expect(res.status).toHaveBeenCalledWith(401);       
     });
 
-    // //500
+    //500
     it('should return error', async () => {
 
         const mockReqInvalidToken = {
@@ -61,7 +61,7 @@ describe('verifyToken', () => {
 
         const mockReqValidToken = {
             headers: {
-                "x-access-token": mockValidToken
+                "x-access-token": mockValidToken //Token Valido
             }
         };
 

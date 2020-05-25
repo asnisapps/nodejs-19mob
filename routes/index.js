@@ -10,7 +10,7 @@ const router = express.Router();
 
 // Rotas base
 router.use('/users', users);
-router.use('/users/auth', auth);
+router.use('/auth', auth);
 
 router.use('/cars', cars);
 
